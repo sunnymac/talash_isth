@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyalphabetic Cipher</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #container {
+            background-color: #b0e9f1b3;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #34db71;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h1>| Polyalphabetic Cipher |</h1>
+    <form id="cipherForm">
+        <label for="text">Text:</label>
+        <input type="text" id="text" name="text" required placeholder="Enter the text here">
+
+        <label for="key">Key:</label>
+        <input type="text" id="key" name="key" required placeholder="Enter key in characters">
+
+        <label for="operation">Operation:</label>
+        <select id="operation" name="operation" required>
+           
+            <option value="decrypt">Decryption</option>
+        </select>
+
+        <button type="button" onclick="performCipher()"><b>Perform Cipher</b></button>
+        <a href="allCipher.html"><button type="button"><b>Back</b></button></a>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function performCipher(){
+        var text = document.getElementById("text").value;
+        var key = document.getElementById("key").value;
+        var operation = document.getElementById("operation").value;
+
+        if (operation === "encrypt") {
+            document.getElementById("result").innerText = "Cipher Text: " + encrypt(text, key);
+        } else if (operation === "decrypt") {
+            document.getElementById("result").innerText = "Plain Text: " + decrypt(text, key);
+        }
+    }
+    function encrypt(plain_txt, k) {
+        let encrypted_text = "";
+        let key_length = k.length;
+        for (let i = 0; i < plain_txt.length; i++) {
+            let char = plain_txt[i];
+            if (char.match(/[a-zA-Z]/)) {
+                let key_char = k[i % key_length];
+                let shift = key_char.toUpperCase().charCodeAt() - 'A'.charCodeAt();
+                let base = char.toUpperCase() === char ? 'A'.charCodeAt() : 'a'.charCodeAt();
+                let encrypted_char = String.fromCharCode((char.charCodeAt() + shift - base) % 26 + base);
+                encrypted_text += encrypted_char;
+            } else {
+                encrypted_text += char;
+            }
+        }
+        return encrypted_text;
+    }
+
+    function decrypt(plain_txt, k) {
+        let encrypted_text = "";
+        let key_length = k.length;
+        for (let i = 0; i < plain_txt.length; i++) {
+            let char = plain_txt[i];
+            if (char.match(/[a-zA-Z]/)) {
+                let key_char = k[i % key_length];
+                let shift = key_char.toUpperCase().charCodeAt() - 'A'.charCodeAt();
+                let base = char.toUpperCase() === char ? 'A'.charCodeAt() : 'a'.charCodeAt();
+                let encrypted_char = String.fromCharCode((char.charCodeAt() - shift - base) % 26 + base);
+                encrypted_text += encrypted_char;
+            } else {
+                encrypted_text += char;
+            }
+        }
+        return encrypted_text;
+    }
+
+
+</script>
+
+</body>
+</html>
